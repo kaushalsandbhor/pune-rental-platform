@@ -1,4 +1,4 @@
-package com.rentalplatform.rentalapi;
+package com.rentalapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
