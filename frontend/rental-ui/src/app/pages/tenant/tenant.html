@@ -1,0 +1,61 @@
+
+<div class="buildings-container">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <div>
+      <span class="section-label">PROPERTY DIRECTORY</span>
+      <h1>Explore buildings.</h1>
+      <p>Find properties and discover places to call home in Pune.</p>
+    </div>
+
+    <div class="total-badge">
+      <span class="count">{{ buildings.length }}</span>
+      <span>Buildings listed</span>
+    </div>
+  </header>
+
+  <!-- Buildings Grid -->
+  <div class="buildings-grid">
+
+    <div class="building-card" *ngFor="let building of buildings">
+
+      <div class="building-card-top">
+        <span class="building-label">PROPERTY</span>
+        <span class="building-icon">⌂</span>
+      </div>
+
+      <div class="building-content">
+        <h2>{{ building.name }}</h2>
+
+        <p class="building-address">
+          <span>⌖</span>
+          {{ building.address }}
+        </p>
+
+        <p class="building-location">
+          {{ building.locality }}, {{ building.city }}
+        </p>
+
+        <p class="building-description">
+          {{ building.description || 'Explore this property and discover available rental options.' }}
+        </p>
+      </div>
+
+      <div class="building-card-footer">
+        <span>Explore property</span>
+        <span class="arrow">↗</span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="buildings.length === 0">
+    <div class="empty-icon">⌂</div>
+    <h2>No buildings listed yet</h2>
+    <p>New properties will appear here when available.</p>
+  </div>
+
+</div>
