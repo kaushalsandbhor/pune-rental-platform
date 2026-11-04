@@ -1,32 +1,45 @@
-import { Component, OnInit } from '@angular/core';
+
+import { Component, OnInit, signal } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
+
 import { BuildingService } from '../../services/building';
 import { Building } from '../../models/building';
-import { NgFor } from '@angular/common';
 
 @Component({
   selector: 'app-tenant',
   standalone: true,
-  imports: [NgFor],
+  imports: [CommonModule, RouterLink],
   templateUrl: './tenant.html',
-  styleUrl: './tenant.scss'
+  styleUrl: './tenant.scss',
 })
 export class Tenant implements OnInit {
 
-  buildings: Building[] = [];
+  // Signal containing an array of buildings
+  buildings = signal<Building[]>([]);
 
-  constructor(private buildingService: BuildingService) {}
+  // Signal for loading state
+  isLoading = signal<boolean>(true);
+
+  constructor(
+    private buildingService: BuildingService
+  ) {}
 
   ngOnInit(): void {
-    this.buildingService.getAllBuildings().subscribe({
-      next: (data) => {
-  this.buildings = data;
 
-  console.log('Count:', this.buildings.length);
-  console.log('First building:', this.buildings[0].name);
-},
+    this.buildingService.getAllBuildings().subscribe({
+
+      next: (data) => {
+        this.buildings.set(data);
+        this.isLoading.set(false);
+      },
+
       error: (error) => {
         console.error('Error fetching buildings:', error);
+        this.isLoading.set(false);
       }
+
     });
+
   }
 }

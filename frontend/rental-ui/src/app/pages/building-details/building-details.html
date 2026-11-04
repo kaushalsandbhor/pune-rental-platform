@@ -1,1 +1,96 @@
-<p>building-details works!</p>
+<div class="page-container">
+
+  <!-- Page Header -->
+  <header class="page-header">
+    <span class="section-label">PROPERTY OVERVIEW</span>
+    <h1>Building Details</h1>
+  </header>
+
+  <!-- Building Information -->
+  @if (building(); as b) {
+    <div class="building-card">
+
+      <div class="building-card-top">
+        <span class="building-label">PROPERTY INFORMATION</span>
+        <span class="building-icon">⌂</span>
+      </div>
+
+      <div class="building-content">
+        <h2>{{ b.name }}</h2>
+
+        <p class="building-address">⌖ {{ b.address }}</p>
+        <p class="building-location">{{ b.locality }}, {{ b.city }}</p>
+        <p class="building-pincode">PIN: {{ b.pincode }}</p>
+        <p class="building-description">{{ b.description }}</p>
+      </div>
+
+    </div>
+  }
+
+  <!-- Flats Section -->
+  <section class="flats-section">
+
+    <div class="section-heading">
+      <div>
+        <span class="section-label">RESIDENTIAL UNITS</span>
+        <h2>Flats in this Building</h2>
+      </div>
+
+      <span class="flat-count">{{ flats().length }} Flats</span>
+    </div>
+
+    <div class="flats-grid">
+
+      @for (flat of flats(); track flat.id) {
+
+        <div class="flat-card">
+
+          <div class="flat-card-top">
+            <span class="flat-label">RESIDENTIAL UNIT</span>
+            <span class="flat-icon">⌂</span>
+          </div>
+
+          <div class="flat-content">
+            <h3>Flat {{ flat.flatNumber }}</h3>
+            <p class="flat-type">{{ flat.flatType }}</p>
+          </div>
+
+          <div class="flat-details">
+
+            <div class="detail-row">
+              <span>Monthly Rent</span>
+              <strong>₹{{ flat.monthlyRent }}</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Security Deposit</span>
+              <strong>₹{{ flat.deposit }}</strong>
+            </div>
+
+          </div>
+
+          <div class="flat-footer">
+            <span>STATUS</span>
+
+            <span
+              class="status-badge"
+              [class.occupied]="flat.status?.toLowerCase() === 'occupied'">
+              {{ flat.status }}
+            </span>
+          </div>
+
+        </div>
+
+      } @empty {
+        <div class="empty-state">
+          <span>⌂</span>
+          <h3>No flats listed</h3>
+          <p>There are currently no flats in this building.</p>
+        </div>
+      }
+
+    </div>
+
+  </section>
+
+</div>
