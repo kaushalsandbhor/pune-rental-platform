@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200", originPatterns = "https://pune-rental-platform.onrender.com")
 @RestController
 @RequestMapping("/api/buildings/{buildingId}/flats")
 public class FlatController {
