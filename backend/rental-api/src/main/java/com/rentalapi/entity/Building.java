@@ -1,6 +1,8 @@
 package com.rentalapi.entity;
 
-
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -26,6 +28,18 @@ public class Building {
 
     @Column(length = 10)
     private String pincode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
+
+    public User getOwner() {
+        return owner;
+    }
+
+    public void setOwner(User owner) {
+        this.owner = owner;
+    }
 
     public String getAddress() {
         return address;
