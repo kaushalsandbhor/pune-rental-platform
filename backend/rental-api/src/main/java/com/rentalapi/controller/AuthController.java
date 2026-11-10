@@ -24,9 +24,6 @@ import com.rentalapi.dto.response.UserResponse;
 
 
 import java.util.Map;
-
-@CrossOrigin(origins = "http://localhost:4200", originPatterns = "https://pune-rental-platform.onrender.com")
-
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

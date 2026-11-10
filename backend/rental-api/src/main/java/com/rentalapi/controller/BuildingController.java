@@ -7,8 +7,10 @@ import com.rentalapi.service.BuildingService;
 
 import jakarta.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:4200", originPatterns = "https://pune-rental-platform.onrender.com")
@@ -38,4 +40,17 @@ public class BuildingController {
     public BuildingResponse getBuildingById(@PathVariable Long id) {
         return buildingService.getBuildingById(id);
     }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BuildingResponse> updateBuilding(
+            @PathVariable Long id,
+            @Valid @RequestBody BuildingRequest request) {
+
+        BuildingResponse response =
+                buildingService.updateBuilding(id, request);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

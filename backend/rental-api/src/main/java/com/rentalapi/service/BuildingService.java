@@ -11,6 +11,8 @@ import com.rentalapi.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 
 @Service
@@ -29,9 +31,42 @@ public class BuildingService {
     }
 
 
-    public BuildingResponse createBuilding(BuildingRequest request) {
+    @Transactional
+    public BuildingResponse updateBuilding(
+            Long buildingId,
+            BuildingRequest request) {
 
-        Building building = convertToEntity(request);
+        // 1. Verify ownership
+        Building building = getBuildingForOwner(buildingId);
+
+        // 2. Update building information
+        building.setName(request.getName());
+        building.setAddress(request.getAddress());
+        building.setLocality(request.getLocality());
+        building.setCity(request.getCity());
+        building.setPincode(request.getPincode());
+        building.setDescription(request.getDescription());
+
+        // 3. Save updated building
+        Building updatedBuilding = buildingRepository.save(building);
+
+        // 4. Convert entity into response DTO
+        return convertToResponse(updatedBuilding);
+    }
+
+
+    @Transactional
+    public void deleteBuilding(Long buildingId) {
+
+        // Verify that the logged-in landlord owns this building
+        Building building = getBuildingForOwner(buildingId);
+
+        // Delete the building
+        buildingRepository.delete(building);
+    }
+
+    @Transactional
+    public BuildingResponse createBuilding(BuildingRequest request) {
 
         Authentication authentication =
                 SecurityContextHolder.getContext().getAuthentication();
@@ -42,13 +77,14 @@ public class BuildingService {
                 .orElseThrow(() ->
                         new RuntimeException("Landlord not found"));
 
+        Building building = convertToEntity(request);
+
         building.setOwner(owner);
 
         Building savedBuilding = buildingRepository.save(building);
 
         return convertToResponse(savedBuilding);
     }
-
 
     public List<BuildingResponse> getAllBuildings() {
 
@@ -96,4 +132,45 @@ public class BuildingService {
 
         return response;
     }
+
+    public Building getBuildingForOwner(Long buildingId) {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User owner = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException("Landlord not found"));
+
+        return buildingRepository
+                .findByIdAndOwnerId(buildingId, owner.getId())
+                .orElseThrow(() ->
+                        new org.springframework.security.access.AccessDeniedException(
+                                "You do not own this building"
+                        ));
+    }
+
+
+    @Transactional(readOnly = true)
+    public List<BuildingResponse> getMyBuildings() {
+
+        Authentication authentication =
+                SecurityContextHolder.getContext().getAuthentication();
+
+        String username = authentication.getName();
+
+        User owner = userRepository.findByUsername(username)
+                .orElseThrow(() ->
+                        new RuntimeException("Landlord not found"));
+
+        List<Building> buildings =
+                buildingRepository.findByOwnerId(owner.getId());
+
+        return buildings.stream()
+                .map(this::convertToResponse)
+                .toList();
+    }
+
 }
