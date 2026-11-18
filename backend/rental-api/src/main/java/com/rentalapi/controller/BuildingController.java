@@ -24,13 +24,6 @@ public class BuildingController {
         this.buildingService = buildingService;
     }
 
-    @PostMapping
-    public BuildingResponse createBuilding(
-            @Valid @RequestBody BuildingRequest request) {
-
-        return buildingService.createBuilding(request);
-    }
-
     @GetMapping
     public List<BuildingResponse> getAllBuildings() {
         return buildingService.getAllBuildings();
@@ -42,15 +35,6 @@ public class BuildingController {
     }
 
 
-    @PutMapping("/{id}")
-    public ResponseEntity<BuildingResponse> updateBuilding(
-            @PathVariable Long id,
-            @Valid @RequestBody BuildingRequest request) {
 
-        BuildingResponse response =
-                buildingService.updateBuilding(id, request);
-
-        return ResponseEntity.ok(response);
-    }
 
 }

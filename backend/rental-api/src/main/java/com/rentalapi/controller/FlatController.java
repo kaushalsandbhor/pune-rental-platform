@@ -20,14 +20,6 @@ public class FlatController {
         this.flatService = flatService;
     }
 
-    @PostMapping
-    public FlatResponse createFlat(
-            @PathVariable Long buildingId,
-            @Valid @RequestBody FlatRequest request) {
-
-        return flatService.createFlat(buildingId, request);
-    }
-
     @GetMapping
     public List<FlatResponse> getFlatsByBuilding(
             @PathVariable Long buildingId) {
