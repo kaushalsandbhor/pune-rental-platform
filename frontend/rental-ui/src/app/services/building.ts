@@ -9,6 +9,8 @@ import { Flat } from '../models/flat';
 })
 export class BuildingService {
   private apiUrl = 'http://localhost:8080/api/buildings';
+    private apiUrl2 = 'http://localhost:8080/api';
+
 
   constructor(private http: HttpClient) {}
 
@@ -23,4 +25,11 @@ export class BuildingService {
   getFlatsByBuilding(id: number): Observable<Flat[]> {
     return this.http.get<Flat[]>(`${this.apiUrl}/${id}/flats`);
   }
+
+  getMyBuildings() {
+  return this.http.get<Building[]>(
+    `${this.apiUrl2}/landlord/buildings`,
+    { withCredentials: true }
+  );
+}
 }

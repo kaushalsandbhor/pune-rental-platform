@@ -15,17 +15,22 @@ import { Building } from '../../models/building';
 export class Landlord implements OnInit {
 
   buildings = signal<Building[]>([]);
+  isLoading = signal(true);
+  errorMessage = signal('');
 
   constructor(private buildingService: BuildingService) {}
 
   ngOnInit(): void {
-    this.buildingService.getAllBuildings().subscribe({
-      next: (data) => {
-        this.buildings.set(data);
-      },
-      error: (error) => {
-        console.error('Error fetching buildings:', error);
-      }
-    });
+    this.buildingService.getMyBuildings().subscribe({
+  next: (data) => {
+    this.buildings.set(data);
+    this.isLoading.set(false);
+  },
+  error: (error) => {
+    console.error('Error fetching buildings:', error);
+    this.errorMessage.set('Unable to load your properties.');
+    this.isLoading.set(false);
+  }
+});
   }
 }

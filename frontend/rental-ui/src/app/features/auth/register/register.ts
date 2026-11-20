@@ -1,14 +1,14 @@
 
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService, RegisterRequest } from '../../../services/auth.service';
 import { finalize } from 'rxjs';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './register.html',
   styleUrl: './register.scss'
 })

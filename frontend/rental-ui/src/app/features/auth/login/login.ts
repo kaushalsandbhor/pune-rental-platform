@@ -1,7 +1,7 @@
 
 import { Component, signal, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { finalize } from 'rxjs';
 
 import { AuthService } from '../../../services/auth.service';
@@ -9,7 +9,7 @@ import { AuthService } from '../../../services/auth.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.scss'
 })
@@ -17,6 +17,7 @@ export class Login {
 
   private authService = inject(AuthService);
   private router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   identifier = signal('');
   password = signal('');
@@ -43,7 +44,10 @@ export class Login {
     )
     .subscribe({
       next: () => {
-        this.router.navigate(['/landlord/dashboard']);
+        const returnUrl =
+  this.route.snapshot.queryParamMap.get('returnUrl') || '/landlord';
+
+this.router.navigateByUrl(returnUrl);
       },
 
       error: (error) => {
